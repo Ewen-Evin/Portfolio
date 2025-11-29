@@ -5,8 +5,8 @@ RewriteEngine On
 #RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # Forcer sans www
-RewriteCond %{HTTP_HOST} ^www\.ewenevin\.fr [NC]
-RewriteRule ^(.*)$ https://ewenevin.fr/$1 [R=301,L]
+#RewriteCond %{HTTP_HOST} ^www\.ewenevin\.fr [NC]
+#RewriteRule ^(.*)$ https://ewenevin.fr/$1 [R=301,L]
 
 # Retirer le suffixe .html des URL, sauf pour les fichiers statiques
 RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|svg|webp|ico|pdf)$ [NC]
@@ -34,7 +34,7 @@ RewriteRule ^contact$ /index.html#contact [L,NE]
 RewriteRule ^presentation$ /index.html#about [L,NE]
 
 # Résolution des problèmes de "Mixed Content" (Upgrade-Insecure-Requests)
-Header always set Content-Security-Policy "upgrade-insecure-requests;"
+#Header always set Content-Security-Policy "upgrade-insecure-requests;"
 
 # Compression GZIP pour améliorer les performances
 <IfModule mod_deflate.c>
