@@ -1,0 +1,78 @@
+RewriteEngine On
+
+# Forcer HTTPS pour toutes les requêtes
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Forcer sans www
+RewriteCond %{HTTP_HOST} ^www\.ewenevin\.fr [NC]
+RewriteRule ^(.*)$ https://ewenevin.fr/$1 [R=301,L]
+
+# Retirer le suffixe .html des URL
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# Rediriger les URL avec .html vers leur version sans .html
+RewriteCond %{THE_REQUEST} \.html
+RewriteRule ^(.*)\.html$ /$1 [R=301,L]
+
+# Rediriger les index.html vers le dossier racine
+RewriteCond %{REQUEST_URI} ^(.*/)index\.html$ [NC]
+RewriteRule . %1 [R=301,NE,L]
+
+# Rediriger les URLs propres vers les sections correspondantes dans index.html
+RewriteRule ^a-propos$ /index.html#about [L,NE]
+RewriteRule ^competences$ /index.html#skills [L,NE]
+RewriteRule ^certifications$ /index.html#certifications [L,NE]
+RewriteRule ^experiences$ /index.html#experience [L,NE]
+RewriteRule ^projets$ /index.html#projects [L,NE]
+RewriteRule ^contact$ /index.html#contact [L,NE]
+
+# Redirection pour les anciens noms de sections (au cas où)
+RewriteRule ^presentation$ /index.html#about [L,NE]
+
+# Résolution des problèmes de "Mixed Content" (Upgrade-Insecure-Requests)
+Header always set Content-Security-Policy "upgrade-insecure-requests;"
+
+# Compression GZIP pour améliorer les performances
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+</IfModule>
+
+# Mise en cache pour améliorer les performances
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresDefault "access plus 2 days"
+</IfModule>
+
+# Protection contre l'accès aux fichiers sensibles
+<FilesMatch "(\.htaccess|\.htpasswd|\.env|\.gitignore|composer\.json|composer\.lock|package\.json|package-lock\.json)">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Empêcher le listing des répertoires
+Options -Indexes
+
+# Page d'erreur personnalisée pour les 404
+ErrorDocument 404 /404.html
