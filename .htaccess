@@ -1,14 +1,15 @@
 RewriteEngine On
 
 # Forcer HTTPS pour toutes les requêtes
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#RewriteCond %{HTTPS} off
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # Forcer sans www
 RewriteCond %{HTTP_HOST} ^www\.ewenevin\.fr [NC]
 RewriteRule ^(.*)$ https://ewenevin.fr/$1 [R=301,L]
 
-# Retirer le suffixe .html des URL
+# Retirer le suffixe .html des URL, sauf pour les fichiers statiques
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|svg|webp|ico|pdf)$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
