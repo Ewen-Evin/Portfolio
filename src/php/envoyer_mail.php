@@ -26,6 +26,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 $mail = new PHPMailer(true);
+$mail->CharSet = 'UTF-8';
 
 try {
     // Config SMTP Zoho
