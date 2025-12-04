@@ -1,45 +1,64 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom = htmlspecialchars($_POST["nom"]);
-    $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-    $telephone = htmlspecialchars($_POST["telephone"] ?? '');
-    $message = htmlspecialchars($_POST["message"]);
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-    if (empty($nom) || empty($email) || empty($message)) {
-        echo "Erreur : Tous les champs obligatoires doivent être remplis.";
-        exit;
-    }
+require __DIR__ . '/load_env.php';
+require __DIR__ . '/../../../vendor/autoload.php';
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Erreur : Format d'email invalide.";
-        exit;
-    }
-
-    $to = "contact@ewenevin.fr"; // Adresse de réception
-    $subject = "Nouveau message de contact de $nom";
-
-    // ⚠️ utiliser une adresse de TON domaine ici (à créer chez ton hébergeur)
-    $from = "contact@ewenevin.fr";
-
-    $headers = "From: Portfolio <$from>\r\n";
-    $headers .= "Reply-To: $email\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion();
-
-    $body = "Nom: $nom\n";
-    $body .= "Email: $email\n";
-    $body .= "Téléphone: $telephone\n\n";
-    $body .= "Message:\n$message\n";
-    $body .= "\n---\nCet email a été envoyé depuis le formulaire de contact de votre portfolio.";
-
-    if (mail($to, $subject, $body, $headers)) {
-        echo "Succès : Votre message a été envoyé.";
-    } else {
-        echo "Erreur : L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
-        error_log("Échec d'envoi d'email pour: $email");
-    }
-} else {
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo "Méthode non autorisée.";
+    exit;
 }
-?>
+
+$nom = htmlspecialchars($_POST["nom"] ?? '');
+$email = filter_var($_POST["email"] ?? '', FILTER_SANITIZE_EMAIL);
+$telephone = htmlspecialchars($_POST["telephone"] ?? '');
+$message = htmlspecialchars($_POST["message"] ?? '');
+
+if (empty($nom) || empty($email) || empty($message)) {
+    echo "Erreur : Tous les champs obligatoires doivent être remplis.";
+    exit;
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo "Erreur : Format d'email invalide.";
+    exit;
+}
+
+$mail = new PHPMailer(true);
+
+try {
+    // Config SMTP Zoho
+    $mail->isSMTP();
+    $mail->Host = $_ENV['MAIL_HOST'];
+    $mail->SMTPAuth = true;
+    $mail->Username = $_ENV['MAIL_USERNAME'];
+    $mail->Password = $_ENV['MAIL_PASSWORD'];
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = $_ENV['MAIL_PORT'];
+
+    // Expéditeur
+    $mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
+
+    // Destinataire (toi)
+    $mail->addAddress($_ENV['MAIL_TO']);
+
+    // Répondre à → l’utilisateur
+    $mail->addReplyTo($email);
+
+    // Contenu
+    $mail->isHTML(false);
+    $mail->Subject = "Nouveau message de contact de $nom";
+
+    $mail->Body = "Nom: $nom\n"
+                . "Email: $email\n"
+                . "Téléphone: $telephone\n\n"
+                . "Message:\n$message\n"
+                . "\n---\nEnvoyé depuis le portfolio.";
+
+    $mail->send();
+    echo "Succès : Votre message a été envoyé.";
+} catch (Exception $e) {
+    echo "Erreur : Impossible d'envoyer l'email.";
+    error_log("Erreur SMTP : " . $mail->ErrorInfo);
+}
