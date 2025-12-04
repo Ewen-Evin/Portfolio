@@ -2,8 +2,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+require __DIR__ . '/../../vendor/autoload.php';
 require __DIR__ . '/load_env.php';
-require __DIR__ . '/../../../vendor/autoload.php';
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo "Méthode non autorisée.";
