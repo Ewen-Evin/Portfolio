@@ -828,6 +828,18 @@ header.sticky {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
+.project-item:hover .project-img::before {
+    opacity: 1;
+}
+
+.project-item:hover .project-overlay-text {
+    opacity: 1;
+}
+
+.project-item:hover .project-img img {
+    transform: scale(1.1);
+}
+
 .project-item.expanded {
     grid-column: 1 / -1;
     z-index: 100;
@@ -889,18 +901,6 @@ header.sticky {
     border: 2px solid white;
     border-radius: 30px;
     background: rgba(0, 0, 0, 0.5);
-}
-
-.project-img:hover::before {
-    opacity: 1;
-}
-
-.project-img:hover .project-overlay-text {
-    opacity: 1;
-}
-
-.project-img:hover img {
-    transform: scale(1.1);
 }
 
 /* Ajustement pour les projets agrandis */
