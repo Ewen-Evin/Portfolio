@@ -428,31 +428,38 @@ function adjustExperienceColumns() {
     const columns = document.querySelectorAll('.experience-column');
     if (columns.length < 2) return;
     
-    // Réinitialiser les hauteurs
-    columns.forEach(col => {
-        col.style.minHeight = 'auto';
-    });
+    const firstColumn = columns[0];  // Parcours scolaire
+    const secondColumn = columns[1]; // Expériences pro
+    
+    // Réinitialiser les styles
+    firstColumn.style.height = 'auto';
+    secondColumn.style.height = 'auto';
+    
+    const firstContainer = firstColumn.querySelector('.timeline-container');
+    const secondContainer = secondColumn.querySelector('.timeline-container');
+    
+    if (firstContainer && secondContainer) {
+        firstContainer.style.maxHeight = 'none';
+        secondContainer.style.maxHeight = 'none';
+    }
     
     // Attendre que le DOM se mette à jour
     setTimeout(() => {
-        // Trouver la hauteur de la colonne la plus courte (parcours scolaire)
-        const firstColumn = columns[0];
-        const secondColumn = columns[1];
-        
+        // Obtenir la hauteur réelle de la première colonne (la plus courte)
         const firstColumnHeight = firstColumn.offsetHeight;
         
-        // Appliquer la même hauteur minimale aux deux colonnes
-        if (firstColumnHeight > 0) {
-            columns.forEach(col => {
-                col.style.minHeight = firstColumnHeight + 'px';
-            });
-            
-            // Ajuster la hauteur max pour le défilement de la deuxième colonne
-            const scrollableContainer = secondColumn.querySelector('.timeline-container');
-            if (scrollableContainer) {
-                const titleHeight = secondColumn.querySelector('.column-title').offsetHeight;
-                scrollableContainer.style.maxHeight = (firstColumnHeight - titleHeight - 50) + 'px';
-            }
+        // Appliquer cette hauteur aux deux colonnes
+        secondColumn.style.height = firstColumnHeight + 'px';
+        
+        // Calculer la hauteur disponible pour le contenu scrollable
+        const titleHeight = secondColumn.querySelector('.column-title').offsetHeight;
+        const padding = 50; // Padding de la colonne (25px * 2) + marge
+        
+        const availableHeight = firstColumnHeight - titleHeight - padding;
+        
+        // Appliquer la hauteur max au container scrollable
+        if (secondContainer) {
+            secondContainer.style.maxHeight = availableHeight + 'px';
         }
     }, 100);
 }

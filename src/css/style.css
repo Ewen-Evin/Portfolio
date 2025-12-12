@@ -702,7 +702,7 @@ header.sticky {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     margin-top: 30px;
-    align-items: stretch; /* Important : étire les colonnes à la même hauteur */
+    align-items: flex-start;
 }
 
 .experience-column {
@@ -712,47 +712,47 @@ header.sticky {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    height: auto; /* Hauteur auto */
-    min-height: 500px; /* Hauteur minimale pour les deux */
+}
+
+/* Titre de la colonne */
+.experience-column .column-title {
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 /* Container pour le contenu avec défilement */
 .experience-column .timeline-container {
-    flex: 1;
-    /* Pas de overflow-y par défaut */
     padding-right: 10px;
     position: relative;
-    height: auto;
 }
 
-/* Appliquez le défilement UNIQUEMENT à la colonne qui en a besoin */
-.experience-column.scrollable .timeline-container {
-    overflow-y: auto;
-    max-height: calc(500px - 80px); /* Hauteur de la colonne moins le titre */
-}
-
-/* Retirez le défilement de la première colonne */
-.experience-column:not(.scrollable) .timeline-container {
+/* Première colonne (Parcours scolaire) - pas de défilement */
+.experience-column:first-child .timeline-container {
     overflow-y: visible;
-    max-height: none;
 }
 
-/* Scrollbar style seulement pour la colonne scrollable */
-.experience-column.scrollable .timeline-container::-webkit-scrollbar {
+/* Deuxième colonne (Expériences pro) - avec défilement */
+.experience-column:last-child .timeline-container {
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+/* Scrollbar style pour la colonne avec défilement */
+.experience-column:last-child .timeline-container::-webkit-scrollbar {
     width: 6px;
 }
 
-.experience-column.scrollable .timeline-container::-webkit-scrollbar-track {
+.experience-column:last-child .timeline-container::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.experience-column.scrollable .timeline-container::-webkit-scrollbar-thumb {
-    background: var(--accent-color); /* Couleur différente pour la 2ème colonne */
+.experience-column:last-child .timeline-container::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
     border-radius: 10px;
 }
 
-.experience-column.scrollable .timeline-container::-webkit-scrollbar-thumb:hover {
+.experience-column:last-child .timeline-container::-webkit-scrollbar-thumb:hover {
     background: #e05555;
 }
 
@@ -776,16 +776,23 @@ header.sticky {
 }
 
 /* Colonne de droite (expériences pro) avec couleur différente */
-.experience-column.scrollable .timeline::after {
+.experience-column:last-child .timeline::after {
     background-color: var(--accent-color);
 }
 
-.experience-column.scrollable .timeline-item::after {
+.experience-column:last-child .timeline-item::after {
     border: 3px solid var(--accent-color);
 }
 
-.experience-column.scrollable .timeline-date {
+.experience-column:last-child .timeline-date {
     color: var(--accent-color);
+}
+
+/* Indicateur visuel pour la colonne avec défilement */
+.experience-column:last-child .column-title::after {
+    content: ' ↕';
+    font-size: 1rem;
+    color: #888;
 }
 
 .experience-column .timeline-item {
@@ -830,30 +837,14 @@ header.sticky {
     z-index: 1;
 }
 
-/* Indicateur visuel seulement pour la colonne avec défilement */
-.experience-column.scrollable .column-title::after {
-    content: ' ↕';
-    font-size: 1rem;
-    color: #888;
-}
-
 /* Responsive */
 @media (max-width: 992px) {
     .experience-columns {
         grid-template-columns: 1fr;
-        min-height: auto;
     }
     
-    .experience-column {
-        min-height: 400px;
-    }
-    
-    .experience-column .timeline-container {
-        max-height: none;
+    .experience-column:last-child .timeline-container {
         overflow-y: visible;
-    }
-    
-    .experience-column.scrollable .timeline-container {
         max-height: none;
     }
     
