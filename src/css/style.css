@@ -702,6 +702,8 @@ header.sticky {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     margin-top: 30px;
+    align-items: start;
+    min-height: 600px;
 }
 
 .experience-column {
@@ -709,6 +711,9 @@ header.sticky {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .column-title {
@@ -718,13 +723,42 @@ header.sticky {
     text-align: center;
     padding-bottom: 10px;
     border-bottom: 2px solid var(--primary-color);
+    flex-shrink: 0;
 }
 
-/* Timeline adaptée pour les colonnes */
+/* Container pour le contenu avec défilement */
+.experience-column .timeline-container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 500px;
+    padding-right: 10px;
+    position: relative;
+}
+
+.experience-column .timeline-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.experience-column .timeline-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.experience-column .timeline-container::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+.experience-column .timeline-container::-webkit-scrollbar-thumb:hover {
+    background: #5a46c5;
+}
+
+/* Timeline adaptée pour les colonnes avec défilement */
 .experience-column .timeline {
     position: relative;
     margin: 0 auto;
     max-width: 100%;
+    padding-bottom: 10px;
 }
 
 .experience-column .timeline::after {
@@ -734,16 +768,16 @@ header.sticky {
     background-color: var(--primary-color);
     top: 0;
     bottom: 0;
-    left: 20px; /* Déplacée à gauche pour les deux colonnes */
+    left: 20px;
     border-radius: 10px;
 }
 
 .experience-column .timeline-item {
-    padding: 10px 0 10px 50px; /* Ajustement du padding */
+    padding: 10px 0 10px 50px;
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    left: 0 !important; /* Reset de la position alternée */
+    left: 0 !important;
 }
 
 .experience-column .timeline-content {
@@ -777,21 +811,27 @@ header.sticky {
     border: 3px solid var(--primary-color);
     border-radius: 50%;
     top: 15px;
-    left: 12px; /* Positionné à gauche */
+    left: 12px;
     z-index: 1;
 }
 
-/* Reset des styles alternés pour les colonnes */
-.experience-column .timeline-item:nth-child(odd)::after,
-.experience-column .timeline-item:nth-child(even)::after {
-    right: auto;
-    left: 11px;
+/* Indicateur visuel pour la colonne qui défile */
+.experience-column.scrollable .column-title::after {
+    content: ' ↕';
+    font-size: 1rem;
+    color: #888;
 }
 
 /* Responsive */
 @media (max-width: 992px) {
     .experience-columns {
         grid-template-columns: 1fr;
+        min-height: auto;
+    }
+    
+    .experience-column .timeline-container {
+        max-height: none;
+        overflow-y: visible;
     }
     
     .experience-column .timeline::after {
@@ -801,6 +841,15 @@ header.sticky {
     .experience-column .timeline-item {
         padding: 10px 0 10px 40px;
     }
+}
+
+/* Style pour s'assurer que les colonnes sont visibles */
+.experience-column:nth-child(1) {
+    border-left: 3px solid var(--primary-color);
+}
+
+.experience-column:nth-child(2) {
+    border-left: 3px solid var(--accent-color);
 }
 
 /* Projects Section - Version améliorée */
