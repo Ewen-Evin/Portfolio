@@ -422,3 +422,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// Fonction pour ajuster la hauteur des colonnes d'expérience
+function adjustExperienceColumns() {
+    const columns = document.querySelectorAll('.experience-column');
+    if (columns.length < 2) return;
+    
+    // Réinitialiser les hauteurs
+    columns.forEach(col => {
+        col.style.minHeight = 'auto';
+    });
+    
+    // Attendre que le DOM se mette à jour
+    setTimeout(() => {
+        // Trouver la hauteur de la colonne la plus courte (parcours scolaire)
+        const firstColumn = columns[0];
+        const secondColumn = columns[1];
+        
+        const firstColumnHeight = firstColumn.offsetHeight;
+        
+        // Appliquer la même hauteur minimale aux deux colonnes
+        if (firstColumnHeight > 0) {
+            columns.forEach(col => {
+                col.style.minHeight = firstColumnHeight + 'px';
+            });
+            
+            // Ajuster la hauteur max pour le défilement de la deuxième colonne
+            const scrollableContainer = secondColumn.querySelector('.timeline-container');
+            if (scrollableContainer) {
+                const titleHeight = secondColumn.querySelector('.column-title').offsetHeight;
+                scrollableContainer.style.maxHeight = (firstColumnHeight - titleHeight - 50) + 'px';
+            }
+        }
+    }, 100);
+}
+
+// Appeler la fonction
+window.addEventListener('load', adjustExperienceColumns);
+window.addEventListener('resize', adjustExperienceColumns);
+setTimeout(adjustExperienceColumns, 1000);

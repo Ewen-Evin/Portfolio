@@ -702,8 +702,7 @@ header.sticky {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     margin-top: 30px;
-    align-items: start;
-    /* Supprimez le min-height: 600px; */
+    align-items: stretch; /* Important : étire les colonnes à la même hauteur */
 }
 
 .experience-column {
@@ -711,60 +710,58 @@ header.sticky {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    /* Changez de height: 100% à height: auto */
     display: flex;
     flex-direction: column;
-    /* Ajoutez ces propriétés pour contrôler la hauteur */
-    height: 100%; /* Gardez 100% pour que les colonnes soient égales */
-    max-height: 700px; /* Hauteur maximale pour éviter que ce soit trop grand */
+    height: auto; /* Hauteur auto */
+    min-height: 500px; /* Hauteur minimale pour les deux */
 }
 
-/* Gardez le défilement pour TOUTES les colonnes */
+/* Container pour le contenu avec défilement */
 .experience-column .timeline-container {
     flex: 1;
-    overflow-y: auto;
-    /* Pas de max-height fixe ici, elle héritera de la colonne parent */
+    /* Pas de overflow-y par défaut */
     padding-right: 10px;
     position: relative;
-    /* La hauteur sera limitée par la colonne parent */
-    height: calc(100% - 50px); /* 50px pour le titre */
+    height: auto;
 }
 
-/* Ajustez la timeline pour ne pas avoir de hauteur fixe */
+/* Appliquez le défilement UNIQUEMENT à la colonne qui en a besoin */
+.experience-column.scrollable .timeline-container {
+    overflow-y: auto;
+    max-height: calc(500px - 80px); /* Hauteur de la colonne moins le titre */
+}
+
+/* Retirez le défilement de la première colonne */
+.experience-column:not(.scrollable) .timeline-container {
+    overflow-y: visible;
+    max-height: none;
+}
+
+/* Scrollbar style seulement pour la colonne scrollable */
+.experience-column.scrollable .timeline-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.experience-column.scrollable .timeline-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.experience-column.scrollable .timeline-container::-webkit-scrollbar-thumb {
+    background: var(--accent-color); /* Couleur différente pour la 2ème colonne */
+    border-radius: 10px;
+}
+
+.experience-column.scrollable .timeline-container::-webkit-scrollbar-thumb:hover {
+    background: #e05555;
+}
+
+/* Ajustez le style de timeline pour les deux colonnes */
 .experience-column .timeline {
     position: relative;
     margin: 0 auto;
     max-width: 100%;
     padding-bottom: 10px;
-    /* Pas de hauteur fixe */
-}
-
-.column-title {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 25px;
-    text-align: center;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--primary-color);
-    flex-shrink: 0;
-}
-
-.experience-column .timeline-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.experience-column .timeline-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.experience-column .timeline-container::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 10px;
-}
-
-.experience-column .timeline-container::-webkit-scrollbar-thumb:hover {
-    background: #5a46c5;
 }
 
 .experience-column .timeline::after {
@@ -778,12 +775,24 @@ header.sticky {
     border-radius: 10px;
 }
 
+/* Colonne de droite (expériences pro) avec couleur différente */
+.experience-column.scrollable .timeline::after {
+    background-color: var(--accent-color);
+}
+
+.experience-column.scrollable .timeline-item::after {
+    border: 3px solid var(--accent-color);
+}
+
+.experience-column.scrollable .timeline-date {
+    color: var(--accent-color);
+}
+
 .experience-column .timeline-item {
     padding: 10px 0 10px 50px;
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    left: 0 !important;
 }
 
 .experience-column .timeline-content {
@@ -821,7 +830,7 @@ header.sticky {
     z-index: 1;
 }
 
-/* Indicateur visuel pour la colonne qui défile */
+/* Indicateur visuel seulement pour la colonne avec défilement */
 .experience-column.scrollable .column-title::after {
     content: ' ↕';
     font-size: 1rem;
@@ -835,9 +844,17 @@ header.sticky {
         min-height: auto;
     }
     
+    .experience-column {
+        min-height: 400px;
+    }
+    
     .experience-column .timeline-container {
         max-height: none;
         overflow-y: visible;
+    }
+    
+    .experience-column.scrollable .timeline-container {
+        max-height: none;
     }
     
     .experience-column .timeline::after {
