@@ -703,7 +703,7 @@ header.sticky {
     gap: 40px;
     margin-top: 30px;
     align-items: start;
-    min-height: 600px;
+    /* Supprimez le min-height: 600px; */
 }
 
 .experience-column {
@@ -711,9 +711,32 @@ header.sticky {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    height: 100%;
+    /* Changez de height: 100% à height: auto */
     display: flex;
     flex-direction: column;
+    /* Ajoutez ces propriétés pour contrôler la hauteur */
+    height: 100%; /* Gardez 100% pour que les colonnes soient égales */
+    max-height: 700px; /* Hauteur maximale pour éviter que ce soit trop grand */
+}
+
+/* Gardez le défilement pour TOUTES les colonnes */
+.experience-column .timeline-container {
+    flex: 1;
+    overflow-y: auto;
+    /* Pas de max-height fixe ici, elle héritera de la colonne parent */
+    padding-right: 10px;
+    position: relative;
+    /* La hauteur sera limitée par la colonne parent */
+    height: calc(100% - 50px); /* 50px pour le titre */
+}
+
+/* Ajustez la timeline pour ne pas avoir de hauteur fixe */
+.experience-column .timeline {
+    position: relative;
+    margin: 0 auto;
+    max-width: 100%;
+    padding-bottom: 10px;
+    /* Pas de hauteur fixe */
 }
 
 .column-title {
@@ -724,15 +747,6 @@ header.sticky {
     padding-bottom: 10px;
     border-bottom: 2px solid var(--primary-color);
     flex-shrink: 0;
-}
-
-/* Container pour le contenu avec défilement */
-.experience-column .timeline-container {
-    flex: 1;
-    overflow-y: auto;
-    max-height: 500px;
-    padding-right: 10px;
-    position: relative;
 }
 
 .experience-column .timeline-container::-webkit-scrollbar {
@@ -751,14 +765,6 @@ header.sticky {
 
 .experience-column .timeline-container::-webkit-scrollbar-thumb:hover {
     background: #5a46c5;
-}
-
-/* Timeline adaptée pour les colonnes avec défilement */
-.experience-column .timeline {
-    position: relative;
-    margin: 0 auto;
-    max-width: 100%;
-    padding-bottom: 10px;
 }
 
 .experience-column .timeline::after {
