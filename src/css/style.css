@@ -748,12 +748,12 @@ header.sticky {
 }
 
 .experience-column:last-child .timeline-container::-webkit-scrollbar-thumb {
-    background: var(--accent-color);
+    background: var(--primary-color);
     border-radius: 10px;
 }
 
 .experience-column:last-child .timeline-container::-webkit-scrollbar-thumb:hover {
-    background: #e05555;
+    background: #5643c4;
 }
 
 /* Ajustez le style de timeline pour les deux colonnes */
@@ -773,19 +773,6 @@ header.sticky {
     bottom: 0;
     left: 20px;
     border-radius: 10px;
-}
-
-/* Colonne de droite (expériences pro) avec couleur différente */
-.experience-column:last-child .timeline::after {
-    background-color: var(--accent-color);
-}
-
-.experience-column:last-child .timeline-item::after {
-    border: 3px solid var(--accent-color);
-}
-
-.experience-column:last-child .timeline-date {
-    color: var(--accent-color);
 }
 
 /* Indicateur visuel pour la colonne avec défilement */
@@ -843,9 +830,20 @@ header.sticky {
         grid-template-columns: 1fr;
     }
     
-    .experience-column:last-child .timeline-container {
-        overflow-y: visible;
-        max-height: none;
+    /* Réinitialiser tous les styles de défilement en mode responsive */
+    .experience-column {
+        height: auto !important;
+    }
+    
+    .experience-column .timeline-container {
+        overflow-y: visible !important;
+        max-height: none !important;
+        padding-right: 10px;
+    }
+    
+    /* Masquer l'indicateur de scroll en responsive */
+    .experience-column:last-child .column-title::after {
+        content: '';
     }
     
     .experience-column .timeline::after {
@@ -863,7 +861,7 @@ header.sticky {
 }
 
 .experience-column:nth-child(2) {
-    border-left: 3px solid var(--accent-color);
+    border-left: 3px solid var(--primary-color);
 }
 
 /* Projects Section - Version améliorée */
