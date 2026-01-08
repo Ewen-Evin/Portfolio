@@ -614,7 +614,6 @@ header.sticky {
 
 .certification-content {
     flex-grow: 1;
-    margin-bottom: 20px;
 }
 
 .certification-content p {
@@ -649,12 +648,78 @@ header.sticky {
 }
 
 .certification-actions {
-    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
-.btn-small {
+/* Container pour le code de vérification */
+.certification-code-container {
+    flex: 1;
+    min-width: 0; /* Permet au contenu de s'adapter */
+}
+
+.certification-code-label {
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    color: #666;
+    text-align: left;
+}
+
+.certification-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: monospace;
+    font-size: 0.9rem;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.certification-code:hover {
+    background: #e8e8e8;
+    border-color: #4CAF50;
+    transform: translateY(-1px);
+}
+
+.certification-code:active {
+    transform: translateY(0);
+    background: #dff0d8;
+}
+
+.certification-code code {
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.certification-code .copy-icon {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.certification-code:hover .copy-icon {
+    opacity: 1;
+}
+
+/* Bouton Voir le certificat */
+.certification-actions .btn-small {
     padding: 8px 20px;
     font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 /* Bouton désactivé */
@@ -674,7 +739,7 @@ header.sticky {
     box-shadow: none !important;
 }
 
-/* Responsive */
+/* Responsive pour la certification */
 @media (max-width: 768px) {
     .certifications-container {
         grid-template-columns: 1fr;
@@ -693,6 +758,34 @@ header.sticky {
     
     .certification-header h3 {
         font-size: 1.2rem;
+    }
+    
+    .certification-actions {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .certification-code {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .certification-code-label {
+        text-align: center;
+    }
+}
+
+/* Pour les très petits écrans */
+@media (max-width: 480px) {
+    .certification-code {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .certification-actions .btn-small {
+        padding: 6px 16px;
+        font-size: 0.85rem;
     }
 }
 

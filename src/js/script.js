@@ -464,6 +464,50 @@ function adjustExperienceColumns() {
     }, 100);
 }
 
+// Fonction pour copier le code PIX dans le presse-papier
+function copyCodeToClipboard() {
+    const code = "P-6MVGVKDP";
+    
+    // Utiliser l'API Clipboard moderne
+    navigator.clipboard.writeText(code).then(() => {
+        // Afficher un feedback visuel
+        const codeElement = document.querySelector('.certification-code');
+        if (codeElement) {
+            const originalText = codeElement.innerHTML;
+            codeElement.innerHTML = '<code>Code copié !</code>';
+            codeElement.style.color = '#4CAF50';
+            
+            // Revenir à l'état initial après 2 secondes
+            setTimeout(() => {
+                codeElement.innerHTML = originalText;
+                codeElement.style.color = '';
+            }, 1500);
+        }
+    }).catch(err => {
+        console.error('Erreur lors de la copie : ', err);
+        // Fallback pour les anciens navigateurs
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Feedback même en cas d'erreur
+        const codeElement = document.querySelector('.certification-code');
+        if (codeElement) {
+            const originalText = codeElement.innerHTML;
+            codeElement.innerHTML = '<code>Code copié !</code>';
+            codeElement.style.color = '#4CAF50';
+            
+            setTimeout(() => {
+                codeElement.innerHTML = originalText;
+                codeElement.style.color = '';
+            }, 2000);
+        }
+    });
+}
+
 // Appeler la fonction
 window.addEventListener('load', adjustExperienceColumns);
 window.addEventListener('resize', adjustExperienceColumns);
