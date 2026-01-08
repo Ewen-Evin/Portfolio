@@ -1,8 +1,9 @@
 RewriteEngine On
 
 # Forcer HTTPS pour toutes les requêtes
-#RewriteCond %{HTTPS} off
-#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # Forcer sans www
 #RewriteCond %{HTTP_HOST} ^www\.ewenevin\.fr [NC]
