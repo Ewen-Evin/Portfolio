@@ -650,7 +650,7 @@ header.sticky {
 .certification-actions {
     margin-top: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     gap: 15px;
 }
@@ -1077,6 +1077,22 @@ header.sticky {
     font-size: 1.4rem;
 }
 
+.project-short-content h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-type-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #888;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
 .project-short-desc {
     display: block;
     margin-bottom: 15px;
@@ -1109,6 +1125,7 @@ header.sticky {
 }
 
 .project-item.expanded .project-short-content .project-short-desc,
+.project-item.expanded .project-short-content .project-type-label,
 .project-item.expanded .project-short-content .project-tags{
     display: none;
 }
@@ -1177,6 +1194,20 @@ header.sticky {
     color: var(--accent-color);
 }
 
+.project-link-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #e07c2a;
+    background: rgba(224, 124, 42, 0.1);
+    border: 1px solid rgba(224, 124, 42, 0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: default;
+}
+
 .project-close {
     position: absolute;
     top: 15px;
@@ -1229,7 +1260,7 @@ header.sticky {
     border-radius: 8px;
 }
 
-.project-type, .project-date, .project-team {
+.project-type, .project-date, .project-team, .project-solo {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -1250,7 +1281,12 @@ header.sticky {
 }
 
 .project-team::before {
-    content: "👥";
+    content: "🤝";
+}
+
+
+.project-solo::before {
+    content: "👤";
 }
 
 /* Ajustement pour les projets avec badge */
